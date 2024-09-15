@@ -11,7 +11,7 @@ use axum::Router;
 use base64::{engine::general_purpose::STANDARD, Engine};
 use core::future::Future;
 use ed25519_dalek::{PublicKey, Signature, Verifier};
-use hyper::{Body, Request};
+use hyper::Request;
 use log::*;
 use passwords::PasswordGenerator;
 use rand::{thread_rng, Rng};
@@ -466,7 +466,7 @@ async fn cmd_stdin(
 async fn register(
     luksd: State<Arc<Luksd>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
-    req: Request<Body>,
+    req: Request<axum::body::Body>,
 ) -> axum::response::Result<()> {
     let mut guard = luksd.map.lock().await;
 
@@ -817,7 +817,9 @@ impl EventLog {
         let yaml = YamlLoader::load_from_str(&log_yaml)?;
         let yaml = yaml.get(0).ok_or_else(|| anyhow::anyhow!("Empty yaml"))?;
 
-        let Yaml::Array(v) = &yaml["events"] else {return Err(anyhow::anyhow!("Invalid events format"))};
+        let Yaml::Array(v) = &yaml["events"] else {
+            return Err(anyhow::anyhow!("Invalid events format"));
+        };
 
         for e in v {
             let (idx, entry, pcr) = Event::parse(e)?;
@@ -825,7 +827,9 @@ impl EventLog {
         }
 
         for algo in ["sha1", "sha256", "sha384"] {
-            let Yaml::Hash(v) = &yaml["pcrs"][algo] else { continue };
+            let Yaml::Hash(v) = &yaml["pcrs"][algo] else {
+                continue;
+            };
 
             for (pcr, hash) in v.iter().filter_map(|(k, v)| {
                 Some((

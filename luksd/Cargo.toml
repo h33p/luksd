@@ -8,12 +8,12 @@ authors = ["Aurimas Blažulionis <aurimas@chorus.one>"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.6"
+axum = "0.7"
 tokio = { version = "1", features = ["full"] }
-hyper = { version = "0.14", features = ["full"] }
-hyper-rustls = { version = "0.23", features = ["http2"] }
+hyper = { version = "1", features = ["full"] }
+hyper-rustls = { version = "0.27", features = ["http2"] }
 anyhow = "1"
-aide = { version = "0.10.0", features = ["axum"] }
+aide = { version = "0.13.0", features = ["axum"] }
 serde = { version = "1", features = ["derive"] }
 triggered = "0.1"
 clap = { version = "4", features = ["cargo", "derive"] }

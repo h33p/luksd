@@ -39,11 +39,16 @@ async fn main() -> anyhow::Result<()> {
 
     let app = api::router(luksd);
 
+    let listener =
+        tokio::net::TcpListener::bind("0.0.0.0:3000".parse::<SocketAddr>().unwrap()).await?;
+
     // run it with hyper on localhost:3000
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
-        .serve(app.into_make_service_with_connect_info::<SocketAddr>())
-        .await
-        .unwrap();
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await
+    .unwrap();
 
     Ok(())
 }
