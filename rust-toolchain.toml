@@ -1,0 +1,4 @@
+[toolchain]
+channel = "1.78"
+targets = [ "x86_64-unknown-linux-musl" ]
+components = [ "rust-analyzer", "rust-src" ]
